@@ -6,23 +6,23 @@ output:
     html_document:
      toc: yes
 ---
-> “If we rely on intuitions of doubtful validity, we run a serious risk of making inaccurate predictions or over confidence decisions.”  Joe Blitzstein
+> “If we rely on intuitions of doubtful validity, we run a serious risk of making inaccurate predictions or over confident decisions.”  Joe Blitzstein
 
 
 ## Motivation
 <img src="./fig/fig1-globe-us-gray.png" align="right" width="35%" height="35%" />
-The adage  _hind sight is 20/20_ is often used to refer how much clearer certain situations were after learning some new facts. Most of us, at one point or another,  may have said 'had I known x took place, I would have done y'. For example, had I known it it was going to get windy, I would have worn my winter jacket.  Had I known event x happened with my customer, I would have adjusted and given this option or discount, or chosen this route.  A 'given this, then that' type of scenario simulation testing is possible if we factor in, what is known in the statistics world, [conditional probability](https://en.wikipedia.org/wiki/Conditional_probability).  Applying 'conditional probability' to a problem increases accuracy to our response by  noticeable magnitude.   **“Conditional probability tells us how to update our belief in light of a new evidence that comes in."[2]**  Therefore, applying conditional statistics, based on actual data, will give us our best chance to understand and make decisions that are important.
+The adage  _hind sight is 20/20_ is often used to refer how much clearer certain situations were after learning some new facts. Most of us, at one point or another,  may have said 'had I known x took place, I would have done y'. For example, had I known it was going to get windy, I would have worn my rain jacket.  Had I known event x happened with my customer, I would have adjusted and given this option or discount, or chosen this route.  A 'given this, then that' type of scenario simulation testing is possible if we factor in, what is known in the statistics world, [conditional probability](https://en.wikipedia.org/wiki/Conditional_probability).  Applying 'conditional probability' to a problem increases accuracy to our response by  noticeable magnitude.   **“Conditional probability tells us how to update our belief in light of a new evidence that comes in."[2]**  Therefore, applying conditional statistics, based on actual data, will give us our best chance to understand and make decisions that are important.
 
-On this blog  I will cover how we can use _statical regression analysis to predict_ an outcome that can be used to make inference. We will look at real world example from a real world dataset.   Using a least square linear fitted regression, to demonstrate a relationship between geolocation(independent variable) and temperature (dependent) variable.  We will first generate the dataset from three data sources and discuss the tidy process, followed by exploring and  visualizing the data, and finally  generating,  evaluating and validating the model.  Ultimately, we will use the model to predict temperature, given the latitude of a given location in the US.  
+On this blog  I will cover how we can use _statistical regression analysis to predict_ an outcome that can be used to make inference. We will look at real world example from a real world dataset.   Using a least square linear fitted regression, to demonstrate a relationship between geolocation(independent variable) and temperature (dependent) variable.  We will first generate the dataset from three data sources and discuss the tidying process, followed by exploring and  visualizing the data, and finally  generating,  evaluating and validating the model.  Ultimately, we will use the model to predict temperature, given the latitude of a given location in the US.  
 
 ## Scenario
 <img src="./fig/weather.png" align="left" width="5%" height="5%" />
-Suppose, for example, a farmer in the United States (US) decides to grow coffee instead of corn, and he learned that one of the key ingredients in successful coffee farming is optimal seasonal temperature (We will use the month of April, as the start of spring which is ideal plant coffee). The farmer wants to decide on a location  to buy a farm.  He learned that [National Oceanic and Atmospheric Adminstration - NOAA](http://www.ncdc.noaa.gov/) keeps historical weather information for all major cities in the US, and wants to simulation model that will help him identified areas that he would consider for purchase. In short, he want to plug in latitude of location, and gets back temperature for that geolocation. 
+Suppose, for example, a farmer in the United States (US) decides to grow coffee instead of corn, and he learned that one of the key ingredients in successful coffee farming is optimal seasonal temperature (We will use the month of April, as the start of spring which is ideal plant coffee). The farmer wants to decide on a location  to buy a farm.  He learned that [National Oceanic and Atmospheric Administration - NOAA](http://www.ncdc.noaa.gov/) keeps historical weather information for all major cities in the US, and wants to simulation model that will help him identify areas that he would consider for purchase. In short, he wants to plug in latitude of location, and get back temperature for that geolocation. 
 
 
 ## Explore the data
 
-The first order of business, as always, is to obtain data that will help extract temperature data in the US. NOAA collects and archives weather data from around the US. So we will be using the seasonal monthly average temperature dataset for 116 major US cities found [here](http://www.infoplease.com/ipa/A0762183.html), and merge it with the US cities geolocation dataset found in the `maps` package, to get our tidy data set for this analysis. The Tidy process includes formatting the datasets, renaming feature names, selecting features and merging the datasets. The `dplyr and reshape2` R packages were used for cleaning the dataset. The code used to tidy the data data can be found on [my github repository](https://github.com/abiyug/regression).
+The first order of business, as always, is to obtain data that will help extract temperature data in the US. NOAA collects and archives weather data from around the US. So we will be using the seasonal monthly average temperature dataset for 116 major US cities found [here](http://www.infoplease.com/ipa/A0762183.html), and merge it with the US cities geolocation dataset found in the `maps` package, to get our tidy data set for this analysis. The Tidy process includes formatting the datasets, renaming feature names, selecting features and merging the datasets. The `dplyr and reshape2` R packages were used for cleaning the dataset. The code used to tidy the data can be found on [my github repository](https://github.com/abiyug/regression).
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 ## Load the library
@@ -131,12 +131,12 @@ us_mainland_temp
 
 As can be seen, before even starting the statistical analysis, the table and the map, we can observe that the average temperature generally is warmer in south and south west vs the Midwest or east, for instance.  
 
-Now, lets get to the fun part and start by looking at the scatter plot for latitude vs temperature. We used `ggplot2` for the scatter plot and [fit a least square](https://en.wikipedia.org/wiki/Least_squares) linear curve to the data. There are different kinds of curves to fit to the data besides linear - the  quadratic, cubic, quadratic, nth-degree and so on, the data dictates the type of curve chosen for the model. On this case, data fits a best with linear (straight line) regression line.
+Now, let's get to the fun part and start by looking at the scatter plot for latitude vs temperature. We used `ggplot2` for the scatter plot and [fit a least square](https://en.wikipedia.org/wiki/Least_squares) linear curve to the data. There are different kinds of curves to fit to the data besides linear - the  quadratic, cubic, quadratic, nth-degree and so on, the data dictates the type of curve chosen for the model. On this case, data fits best with linear (straight line) regression line.
 
 
 ## Modeling with Regression Analysis
 
-Because the surface temperature on earth, is often, depends on geolocation measured by latitude and longitude, and this information is not influenced by temperature,we will use the latitude data as explanatory variable (x axis), the temperature as response variable (y-axis) for scattered plot.  To generate the linear plot on the graph, we will use R's linear model function (lm) to fit the Least [Squared Regression (LSR)](http://www.itl.nist.gov/div898/handbook/pmd/section1/pmd141.htm) line.  LSR, also known as `goodness of fit`, which means how well the model fits the set of observed data. 
+Because the surface temperature on earth, is often, dependent on geolocation measured by latitude and longitude, and this information is not influenced by temperature, we will use the latitude data as explanatory variable (x axis), the temperature as response variable (y-axis) for scattered plot.  To generate the linear plot on the graph, we will use R's linear model function (lm) to fit the Least [Squared Regression (LSR)](http://www.itl.nist.gov/div898/handbook/pmd/section1/pmd141.htm) line.  LSR, also known as `goodness of fit`, which means how well the model fits the set of observed data. 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=4, fig.align='center' }
 q1 <- qplot(region, apr, colour = region, data = us_weather_df, geom = c("boxplot", "jitter"))
@@ -163,10 +163,10 @@ grid.arrange(q2, p1, nrow=1, ncol=2)
 ```
 **_Figure 2: The Figure on the left shows the boxplot temperature frequency distributions for each of the 4 regions in the US. The figure on the right shows linear model fit that shows negative correlation between latitude and temperature. As temperature decreases the latitude increases._**  
 
-### Fitting the Linear regresion model
+### Fitting the Linear regression model
 A regression analysis gives an output that lists statistical relationships between predictor variable (latitude) and the response variable (temperature). The more significant outputs, for this example, that validate the model fit, including _residual error_, _$R^2$_, and _p-value_, will be discussed below. 
 
-To generate a model,  we use the _linear model_ (lm) function in `R` to carry out the regression single stratum analysis, to produce an equation we will use for prediction.  **Which is the model will give us an estimation for temprature given the value for latitude.**
+To generate a model,  we use the _linear model_ (lm) function in `R` to carry out the regression single stratum analysis, to produce an equation we will use for prediction.  **Which is the model that will give us an estimation for temperature given the value for latitude.**
 
 
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
@@ -174,7 +174,7 @@ attach(us_weather_df)
 regression.lm <- lm(apr ~ lat)
 regression.lm
 ```
-The value for the `cofficient` gives the values for the intercept `101` and the slope `-1.2` for the fitted regression line. 
+The value for the `coefficient` gives the values for the intercept `101` and the slope `-1.2` for the fitted regression line. 
 
 Therefore, the model equation we will use to predict temperature can be written as follows:
 
@@ -182,7 +182,7 @@ $Y = a_0 + a_1 X$                              (1)
 
 Or can be written on our case <br>
 
-$Temprature = 101 - 1.2 lat$                   (2)
+$Temeprature = 101 - 1.2 lat$                   (2)
 
 Plugging a latitude values  range  between `r range(us_weather_df$lat)` to get temperature prediction. Now, before we confirm this is the model we will use we need to evaluate and validate our model.
 
@@ -198,7 +198,7 @@ There are lots of information to parse here, but the once we are interested for 
 ### Residual Error
 Residual error, in statistics, are referred to the `true` error and the plots will measure of the variation in the response variable (temp) due to error. Before we validate our model and give it thumbs up, we  must check the `residual error` plot. If the plot shows no discernible pattern, then it is considered the model assumption is accepted. If there is pattern in the error plot, there is flow and we need to remodel with different fitted line. 
 
-Lets take a look at the 
+Let's take a look at the following table:
 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=4, fig.align='center' }
@@ -229,11 +229,11 @@ The P value for bot the intercept and the slope is tests a null hypothesis that 
 coef(summary(regression.lm))                           # extract standard error, t-value, p-value
 ```
 
-Because p-value $2.65^-60$ and $1.76^-29$ are both less than 0.05, we reject a null hypothesis. Which means predictor **is very likely an meaningful contributor to our model**.
+Because p-value $2.65^-60$ and $1.76^-29$ are both less than 0.05, we reject a null hypothesis. Which means predictor **is very likely a meaningful contributor to our model**.
 
 
 ## Prediction
-If we input the latitude into the model,  we can now use our model to predict the temperature.  The weather data is only for the US only. For example, if we want see what the temperature for latitude 25  and 55 degrees, we can do the following.
+If we input the latitude into the model,  we can now use our model to predict the temperature.  The weather data is only for the US only. For example, if we want to see what the temperature for latitude 25  and 55 degrees are, we can do the following.
 
 ```{r, echo=TRUE, warning=FALSE, message=FALSE }
 new_lat <- data.frame(lat = c(25, 55))                    # New latitude to get temp prediction for 
@@ -243,8 +243,8 @@ df1 <- cbind(latitude = new_lat, Predicted_Temp = pred)   # combine the result f
 df1
 ```
 
-## Checking confidence for our predction
-When using a mode it is more appropriate to give a range or interval for the predicted temperature rather than a single value, due to margin of error consideration. Therefore, we will use the confidence interval option in the predict function,  to get temperature values in 95% confidence interval range for a given set of latitude. Here is an example prediction for randomly chosen six different latitudes.
+## Checking the confidence for our prediction
+When using a mode it is more appropriate to give a range or interval for the predicted temperature rather than a single value, due to margin of error consideration. Therefore, we will use the confidence interval option in the prediction function,  to get temperature values in 95% confidence interval range for a given set of latitude. Here is an example prediction for randomly chosen six different latitudes.
 
 ```{r, echo=TRUE, warning=FALSE, message=FALSE }
 new_lat <- data.frame(lat = c(21, 28, 34, 49.3, 52.2, 60.1))        # latitude data for prediction
@@ -262,21 +262,26 @@ Here we have seen that given historical temperature data and the geolocation coo
 
 -  Resulting analysis confirms that weather at higher altitude in the continental US are generally cooler (N. East, Midwest) than they are in the lower latitude (West).
 
-- The model can predicts the temperature with 95% confidence interval with acceptable margin of error, given the latitude of the location. 
+- The model can predict the temperature with 95% confidence interval with acceptable margin of error, given the latitude of the location. 
 
-- The farmer who wanted to identify a location with optimal weather can use this model, and the map, to interactively get prediction when he input latitude for interested location. 
+- The farmer who wanted to identify a location with optimal weather can use this model, and the map, to interactively get prediction when he inputs latitude for the location he is interested in. 
 
 _Note: The model can be embeded in a web app and be made avialble to other farmers.  Perhaps I will develop and share the app or a dashboard using a RStudio shiny frame work._
 
 ## Code
-[The full program and data for this paper is found on my github respository](https://github.com/abiyug/regression)
+[The full program and data for this paper is found on my github repository](https://github.com/abiyug/regression)
 
 ## References
-[1] (US Department of commerce)[http://www.itl.nist.gov/div898/handbook/pmd/section1/pmd141.htm] _Engineering Statstics handbook_  <br>
+[1] (US Department of commerce)[http://www.itl.nist.gov/div898/handbook/pmd/section1/pmd141.htm] _Engineering Statistics handbook_  <br>
 [2J J. Blitzstein and J. Hawang - _Introduction to Probability_, CRC press <br>
 [3] B. Caffo _Regression Models for Data Science in R_ JHU lean pub <br>
-[4] G. Hystadd lecture  _Simple Linear Regerssion_ <br>
-[5] Weather data is obtained from from National Oceanic & Atmospheric Administration (NOAA)<br>
+[4] G. Hystadd lecture  _Simple Linear Regression_ <br>
+[5] Weather data is obtained from National Oceanic & Atmospheric Administration (NOAA)<br>
 [6] wikipedia.org/wiki/
 
 **This document is fully reproducible** <br>
+
+
+
+
+
