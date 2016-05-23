@@ -50,7 +50,7 @@ df11 <- cbind(city, df1[,-1])                                         # clean df
 names(df11) <-  c("city", "state", "popln", "lat", "long", "capital") # rename heading  
 
 # dataset 2 us regions
-us_state_region <- read.csv("~/Documents/DataScience/Blogs/Blog7/data/us_state_region.csv")
+us_state_region <- read.csv("~/Documents/DataScience/Blog/regression/data/us_state_region.csv")
 
 df_city_region <- dplyr::inner_join(df11, us_state_region, by="state") # add us region to the table
                                       
@@ -59,7 +59,7 @@ df_city_region <- tbl_df(df_city_region) %>%
 
 # dataset 3
 # download from NOAA
-us_weather <- tbl_df(read.csv("~/Documents/DataScience/Blogs/Blog7/data/us-cities-monthly-weather-noaa-2.csv"))
+us_weather <- tbl_df(read.csv("~/Documents/DataScience/Blog/regression/data/us-cities-monthly-weather-noaa-2.csv"))
 
 ## Tidy df2
 
